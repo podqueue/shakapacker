@@ -160,7 +160,16 @@ module Webpacker::Helper
   def stylesheet_pack_tag(*names, **options)
     return "" if Webpacker.inlining_css?
 
-    stylesheet_link_tag(*sources_from_manifest_entrypoints(names, type: :stylesheet), **options)
+    names.map { |name|
+      entry = current_webpacker_instance.manifest.lookup(name.to_s, type: :stylesheet)
+      integrity = current_webpacker_instance.manifest.lookup_integrity(name.to_s, type: :stylesheet)
+      if integrity.present?
+        stylesheet_link_tag(entry, **options.tap { |o| o[:integrity] = integrity;
+                                                       o[:crossorigin] = 'anonymous' })
+      else
+        stylesheet_link_tag(entry, **options)
+      end 
+    }.join("\n").html_safe # rubocop:disable Rails/OutputSafety
   end
 
   private
