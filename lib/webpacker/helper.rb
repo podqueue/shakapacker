@@ -103,7 +103,7 @@ module Webpacker::Helper
 
     @javascript_pack_tag_loaded = true
 
-    names.map do |name|
+    names.map { |name|
       entry = sources_from_manifest_entrypoints([name], type: :javascript)
       integrity = current_webpacker_instance.manifest.lookup_integrity(name.to_s, type: :javascript)
       if integrity.present?
@@ -113,7 +113,7 @@ module Webpacker::Helper
       else
         javascript_include_tag(*entry, **options.tap { |o| o[:defer] = defer })
       end 
-    end
+    }.join("\n").html_safe # rubocop:disable Rails/OutputSafety
   end
 
   # Creates a link tag, for preloading, that references a given Webpacker asset.
