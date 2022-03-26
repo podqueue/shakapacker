@@ -104,14 +104,14 @@ module Webpacker::Helper
     @javascript_pack_tag_loaded = true
 
     names.map { |name|
-      entry = sources_from_manifest_entrypoints([name], type: :javascript)
+      entry = current_webpacker_instance.manifest.lookup(name.to_s, type: :javascript)
       integrity = current_webpacker_instance.manifest.lookup_integrity(name.to_s, type: :javascript)
       if integrity.present?
-        javascript_include_tag(*entry, **options.tap { |o| o[:defer] = defer;
+        javascript_include_tag(entry, **options.tap { |o| o[:defer] = defer;
                                                            o[:integrity] = integrity;
                                                            o[:crossorigin] = 'anonymous' })
       else
-        javascript_include_tag(*entry, **options.tap { |o| o[:defer] = defer })
+        javascript_include_tag(entry, **options.tap { |o| o[:defer] = defer })
       end 
     }.join("\n").html_safe # rubocop:disable Rails/OutputSafety
   end
