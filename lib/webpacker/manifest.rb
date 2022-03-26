@@ -41,7 +41,15 @@ class Webpacker::Manifest
   def lookup(name, pack_type = {})
     compile if compiling?
 
-    find(full_pack_name(name, pack_type[:type]))
+    asset = find(full_pack_name(name, pack_type[:type]))
+    (asset.respond_to?(:dig) && asset.dig('src')) || asset # rubocop:disable Style/SingleArgumentDig
+  end
+
+  def lookup_integrity(name, pack_type = {})
+    compile if compiling?
+
+    asset = find(full_pack_name(name, pack_type[:type]))
+    (asset.respond_to?(:dig) && asset.dig('integrity')) || nil # rubocop:disable Style/SingleArgumentDig
   end
 
   # Like lookup, except that if no asset is found, raises a Webpacker::Manifest::MissingEntryError.
