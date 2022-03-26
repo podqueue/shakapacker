@@ -52,6 +52,7 @@ const getPlugins = () => {
   const plugins = [
     new webpack.EnvironmentPlugin(process.env),
     new WebpackAssetsManifest({
+      integrity: true,
       entrypoints: true,
       writeToDisk: true,
       output: config.manifestPath,
