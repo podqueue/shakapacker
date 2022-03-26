@@ -83,6 +83,7 @@ const hash = isProduction ? '-[contenthash]' : ''
 module.exports = {
   mode: 'production',
   output: {
+    crossOriginLoading: 'anonymous',
     filename: `js/[name]${hash}.js`,
     chunkFilename: `js/[name]${hash}.chunk.js`,
 
