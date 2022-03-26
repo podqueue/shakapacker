@@ -53,10 +53,12 @@ const getPlugins = () => {
   const plugins = [
     new webpack.EnvironmentPlugin(process.env),
     new SubresourceIntegrityPlugin({
+      hashFuncNames: ['sha384'],
       enabled: true
     }),
     new WebpackAssetsManifest({
       integrity: true,
+      integrityHashes: ['sha384'],
       entrypoints: true,
       writeToDisk: true,
       output: config.manifestPath,
