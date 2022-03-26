@@ -52,7 +52,9 @@ const getModulePaths = () => {
 const getPlugins = () => {
   const plugins = [
     new webpack.EnvironmentPlugin(process.env),
-    new SubresourceIntegrityPlugin(),
+    new SubresourceIntegrityPlugin({
+      enabled: true
+    }),
     new WebpackAssetsManifest({
       integrity: true,
       entrypoints: true,
