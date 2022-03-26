@@ -5,6 +5,7 @@ const { basename, dirname, join, relative, resolve } = require('path')
 const extname = require('path-complete-extname')
 const { sync: globSync } = require('glob')
 const WebpackAssetsManifest = require('webpack-assets-manifest')
+const { SubresourceIntegrityPlugin } = require('webpack-subresource-integrity')
 const webpack = require('webpack')
 const rules = require('../rules')
 const { isProduction } = require('../env')
@@ -51,6 +52,7 @@ const getModulePaths = () => {
 const getPlugins = () => {
   const plugins = [
     new webpack.EnvironmentPlugin(process.env),
+    new SubresourceIntegrityPlugin(),
     new WebpackAssetsManifest({
       integrity: true,
       entrypoints: true,
