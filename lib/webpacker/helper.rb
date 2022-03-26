@@ -103,7 +103,17 @@ module Webpacker::Helper
 
     @javascript_pack_tag_loaded = true
 
-    javascript_include_tag(*sources_from_manifest_entrypoints(names, type: :javascript), **options.tap { |o| o[:defer] = defer })
+    names.map do |name|
+      entry = sources_from_manifest_entrypoints([name], type: :javascript)
+      integrity = current_webpacker_instance.manifest.lookup_integrity(name.to_s, type: :javascript)
+      if integrity.present?
+        javascript_include_tag(*entry, **options.tap { |o| o[:defer] = defer;
+                                                           o[:integrity] = integrity;
+                                                           o[:crossorigin] = 'anonymous' })
+      else
+        javascript_include_tag(*entry, **options.tap { |o| o[:defer] = defer })
+      end 
+    end
   end
 
   # Creates a link tag, for preloading, that references a given Webpacker asset.
